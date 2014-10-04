@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.text.format.Time;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -277,10 +278,13 @@ public class MainActivity extends Activity {
     }
 
     private static Date getLocalTime(long unixTimeStamp) {
-        // TODO: Timezone (nie wiedzieć dlaczego nie działa)
         Calendar cal = GregorianCalendar.getInstance();
+        TimeZone from = TimeZone.getTimeZone("UTC");
+        TimeZone to = TimeZone.getDefault(); // W emulatorze zwraca UTC zamiast lokalnej strefy
+
+        cal.setTimeZone(from);
         cal.setTimeInMillis(unixTimeStamp * 1000L);
-        cal.setTimeZone(TimeZone.getTimeZone("CEST"));
+        cal.setTimeZone(to);
 
         return cal.getTime();
     }
