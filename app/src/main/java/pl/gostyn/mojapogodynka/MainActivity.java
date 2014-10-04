@@ -42,7 +42,7 @@ import java.util.GregorianCalendar;
 import java.util.TimeZone;
 
 import pl.gostyn.mojapogodynka.model.City;
-import pl.gostyn.mojapogodynka.model.CurrentWeather;
+import pl.gostyn.mojapogodynka.model.Weather;
 
 
 public class MainActivity extends Activity {
@@ -285,18 +285,18 @@ public class MainActivity extends Activity {
         return cal.getTime();
     }
 
-    private void setWeatherData(CurrentWeather weather) {
-        ((TextView) findViewById(R.id.condDescr)).setText(weather.weather[0].description);
-        ((TextView) findViewById(R.id.temp)).setText(String.format("%.0f \u2103", weather.main.temp));
-        ((TextView) findViewById(R.id.press)).setText(String.format("%.2f hPa", weather.main.pressure));
-        ((TextView) findViewById(R.id.hum)).setText(String.format("%d %%", weather.main.humidity));
+    private void setWeatherData(Weather weather) {
+        ((TextView) findViewById(R.id.condDescr)).setText(weather.conditions[0].description);
+        ((TextView) findViewById(R.id.temp)).setText(String.format("%.0f \u2103", weather.parameters.temp));
+        ((TextView) findViewById(R.id.press)).setText(String.format("%.2f hPa", weather.parameters.pressure));
+        ((TextView) findViewById(R.id.hum)).setText(String.format("%d %%", weather.parameters.humidity));
         ((TextView) findViewById(R.id.windSpeed)).setText(String.format("%.2f m/s", weather.wind.speed));
         ((TextView) findViewById(R.id.windDeg)).setText(String.format("(%.4f \u00B0)", weather.wind.deg));
 
-        ((TextView) findViewById(R.id.sunrise)).setText(String.format("%tR", getLocalTime(weather.sys.sunrise)));
-        ((TextView) findViewById(R.id.sunset)).setText(String.format("%tR", getLocalTime(weather.sys.sunset)));
+        ((TextView) findViewById(R.id.sunrise)).setText(String.format("%tR", getLocalTime(weather.sun.sunrise)));
+        ((TextView) findViewById(R.id.sunset)).setText(String.format("%tR", getLocalTime(weather.sun.sunset)));
 
-        String imgName = String.format("weather_%s", weather.weather[0].icon);
+        String imgName = String.format("weather_%s", weather.conditions[0].icon);
         int imgId = getResources().getIdentifier(imgName, "drawable", this.getPackageName());
         ((ImageView) findViewById(R.id.condIcon)).setImageResource(imgId);
     }
@@ -314,13 +314,13 @@ public class MainActivity extends Activity {
 
         @Override
         protected void onPostExecute(String string) {
-            CurrentWeather weather = (new Gson()).fromJson(string, CurrentWeather.class);
+            Weather weather = (new Gson()).fromJson(string, Weather.class);
 
-            if (weather.cod == 200) {
+            if (weather.httpResponseCode == 200) {
                 setWeatherData(weather);
             }
             else {
-                String msg = String.format(getString(R.string.bad_server_response), weather.cod);
+                String msg = String.format(getString(R.string.bad_server_response), weather.httpResponseCode);
                 Toast.makeText(getBaseContext(), msg, Toast.LENGTH_SHORT).show();
             }
         }

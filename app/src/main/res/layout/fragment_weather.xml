@@ -37,8 +37,7 @@
         android:layout_marginStart="@dimen/horizontal_spacing_big"
         android:layout_below="@id/condDescr"
         android:layout_toRightOf="@id/condIcon"
-        android:layout_toEndOf="@id/condIcon"
-        />
+        android:layout_toEndOf="@id/condIcon" />
 
     <TextView
         android:id="@+id/pressLab"
