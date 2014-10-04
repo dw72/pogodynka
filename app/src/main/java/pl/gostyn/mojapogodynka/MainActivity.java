@@ -1,5 +1,6 @@
 package pl.gostyn.mojapogodynka;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -24,6 +25,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 
@@ -44,10 +46,10 @@ import pl.gostyn.mojapogodynka.model.CurrentWeather;
 
 
 public class MainActivity extends Activity {
-    public static final String PREFS_FILE = "WeatherPrefsFile";
-    public static final String PREFS_DRAWER_POSITION = "drawer_position";
+    private static final String PREFS_FILE = "WeatherPrefsFile";
+    private static final String PREFS_DRAWER_POSITION = "drawer_position";
 
-    public static final String WEATHER_URL = "http://api.openweathermap.org/data/2.5/weather?APPID=232164e69796bda78852551b1fa13a36&lang=pl&type=like&units=metric&id=";
+    private static final String WEATHER_URL = "http://api.openweathermap.org/data/2.5/weather?APPID=232164e69796bda78852551b1fa13a36&lang=pl&type=like&units=metric&id=";
 
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
@@ -57,10 +59,9 @@ public class MainActivity extends Activity {
     private CharSequence mDrawerTitle;
     private CharSequence mTitle;
 
-    private ArrayList<City> mCities = new ArrayList<City>();
+    private final ArrayList<City> mCities = new ArrayList<City>();
 
     private int mSelectedPosition;
-    private String mWeatherIcon;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,28 +86,30 @@ public class MainActivity extends Activity {
 
         loadSettings();
 
-        getActionBar().setDisplayHomeAsUpEnabled(true);
-        getActionBar().setHomeButtonEnabled(true);
+        final ActionBar ab = getActionBar();
+        if (ab != null) {
+            ab.setDisplayHomeAsUpEnabled(true);
+            ab.setHomeButtonEnabled(true);
 
-        mDrawerToggle = new ActionBarDrawerToggle(
-                this,
-                mDrawerLayout,
-                R.drawable.ic_drawer,
-                R.string.navigation_drawer_open,
-                R.string.navigation_drawer_close
-        ) {
-            public void onDrawerClosed() {
-                getActionBar().setTitle(mTitle);
-                invalidateOptionsMenu();
-            }
+            mDrawerToggle = new ActionBarDrawerToggle(
+                    this,
+                    mDrawerLayout,
+                    R.drawable.ic_drawer,
+                    R.string.navigation_drawer_open,
+                    R.string.navigation_drawer_close
+            ) {
+                public void onDrawerClosed() {
+                    ab.setTitle(mTitle);
+                    invalidateOptionsMenu();
+                }
 
-            public void onDrawerOpened() {
-                getActionBar().setTitle(mDrawerTitle);
-                invalidateOptionsMenu();
-            }
-        };
-        mDrawerLayout.setDrawerListener(mDrawerToggle);
-
+                public void onDrawerOpened() {
+                    ab.setTitle(mDrawerTitle);
+                    invalidateOptionsMenu();
+                }
+            };
+            mDrawerLayout.setDrawerListener(mDrawerToggle);
+        }
         if (savedInstanceState == null) {
             selectItem(mSelectedPosition);
         }
@@ -127,7 +130,7 @@ public class MainActivity extends Activity {
         SharedPreferences settings = getSharedPreferences(PREFS_FILE, 0);
         SharedPreferences.Editor editor = settings.edit();
         editor.putInt(PREFS_DRAWER_POSITION, mSelectedPosition);
-        editor.commit();
+        editor.apply();
     }
 
     @Override
@@ -248,7 +251,10 @@ public class MainActivity extends Activity {
     @Override
     public void setTitle(CharSequence title) {
         mTitle = title;
-        getActionBar().setTitle(mTitle);
+        ActionBar ab = getActionBar();
+        if (ab != null) {
+            ab.setTitle(mTitle);
+        }
     }
 
     @Override
@@ -270,7 +276,7 @@ public class MainActivity extends Activity {
         }
     }
 
-    public static Date getLocalTime(long unixTimeStamp) {
+    private static Date getLocalTime(long unixTimeStamp) {
         // TODO: Timezone (nie wiedzieć dlaczego nie działa)
         Calendar cal = GregorianCalendar.getInstance();
         cal.setTimeInMillis(unixTimeStamp * 1000L);
@@ -310,7 +316,13 @@ public class MainActivity extends Activity {
         protected void onPostExecute(String string) {
             CurrentWeather weather = (new Gson()).fromJson(string, CurrentWeather.class);
 
-            setWeatherData(weather);
+            if (weather.cod == 200) {
+                setWeatherData(weather);
+            }
+            else {
+                String msg = String.format(getString(R.string.bad_server_response), weather.cod);
+                Toast.makeText(getBaseContext(), msg, Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
@@ -323,15 +335,8 @@ public class MainActivity extends Activity {
         }
 
         @Override
-        public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-        }
-
-        @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_weather, container, false);
-
-            return rootView;
+            return inflater.inflate(R.layout.fragment_weather, container, false);
         }
     }
 }

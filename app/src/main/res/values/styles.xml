@@ -12,6 +12,7 @@
     <style name="tempStyle" parent="android:TextAppearance.Large">
         <item name="android:textColor">#2e9afe</item>
         <item name="android:textStyle">bold</item>
+        <item name="android:textSize">36sp</item>
     </style>
 
     <style name="tempMin" parent="android:TextAppearance.Medium">

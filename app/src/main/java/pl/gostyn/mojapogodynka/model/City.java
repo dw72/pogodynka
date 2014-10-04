@@ -1,8 +1,8 @@
 package pl.gostyn.mojapogodynka.model;
 
 public class City {
-    public String name;
-    public int id;
+    public final String name;
+    public final int id;
 
     public City(String name, int id) {
         this.name = name;
