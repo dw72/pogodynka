@@ -14,7 +14,6 @@ import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.text.format.Time;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -224,7 +223,14 @@ public class MainActivity extends Activity {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = cm.getActiveNetworkInfo();
 
-        return (networkInfo != null && networkInfo.isConnected());
+        if (networkInfo != null && networkInfo.isConnected()) {
+            return true;
+
+        } else {
+            String msg = "Network is not connected";
+            Toast.makeText(getBaseContext(), msg, Toast.LENGTH_SHORT).show();
+            return false;
+        }
     }
 
     private HttpURLConnection getHttpURLConnection(String url) throws IOException {
@@ -312,7 +318,9 @@ public class MainActivity extends Activity {
             try {
                 return downloadWeather(urls[0]);
             } catch (IOException e) {
-                return "Unable to retrieve weather data.";
+                String msg = "Unable to retrieve weather data";
+                Toast.makeText(getBaseContext(), msg, Toast.LENGTH_SHORT).show();
+                return msg;
             }
         }
 
