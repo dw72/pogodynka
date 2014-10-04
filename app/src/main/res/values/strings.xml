@@ -2,16 +2,22 @@
 <resources>
 
     <string name="app_name">Moja Pogodynka</string>
+
     <string name="navigation_drawer_open">Otwórz menu</string>
     <string name="navigation_drawer_close">Zamknij menu</string>
+
     <string name="action_add_city">Dodaj miejscowość</string>
     <string name="action_refresh">Odśwież dane</string>
+
     <string name="icon">Ikona pogody</string>
     <string name="pressure">Ciśnienie</string>
     <string name="humidity">Wilgotność</string>
     <string name="wind">Wiatr</string>
     <string name="sunset">Zachód słońca</string>
     <string name="sunrise">Wschód słońca</string>
-    <string name="bad_server_response">Nieprawidłowa odpowiedź serwera: %d</string>
+
+    <string name="err_network_disconnected">Sieć jest rozłączona</string>
+    <string name="err_unable_to_retrieve">Nie można pobrać danych pogodowych</string>
+    <string name="err_bad_response">Nieprawidłowa odpowiedź serwera: %d</string>
 
 </resources>

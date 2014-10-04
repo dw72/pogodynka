@@ -227,7 +227,7 @@ public class MainActivity extends Activity {
             return true;
 
         } else {
-            String msg = "Network is not connected";
+            String msg = getString(R.string.err_network_disconnected);
             Toast.makeText(getBaseContext(), msg, Toast.LENGTH_SHORT).show();
             return false;
         }
@@ -318,7 +318,7 @@ public class MainActivity extends Activity {
             try {
                 return downloadWeather(urls[0]);
             } catch (IOException e) {
-                String msg = "Unable to retrieve weather data";
+                String msg = getString(R.string.err_unable_to_retrieve);
                 Toast.makeText(getBaseContext(), msg, Toast.LENGTH_SHORT).show();
                 return msg;
             }
@@ -332,7 +332,7 @@ public class MainActivity extends Activity {
                 setWeatherData(weather);
             }
             else {
-                String msg = String.format(getString(R.string.bad_server_response), weather.httpResponseCode);
+                String msg = String.format(getString(R.string.err_bad_response), weather.httpResponseCode);
                 Toast.makeText(getBaseContext(), msg, Toast.LENGTH_SHORT).show();
             }
         }
