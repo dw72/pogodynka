@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Moja Pogodynka</string>
+    <string name="navigation_drawer_open">Otwórz menu</string>
+    <string name="navigation_drawer_close">Zamknij menu</string>
+    <string name="action_add_city">Dodaj miejscowość</string>
+    <string name="current_location">Bieżąca lokalizacja</string>
+    <string name="action_refresh">Odśwież dane</string>
+    <string name="icon">Ikona pogody</string>
+    <string name="pressure">Ciśnienie</string>
+    <string name="humidity">Wilgotność</string>
+    <string name="wind">Wiatr</string>
+    <string name="sunset">Zachód słońca</string>
+    <string name="sunrise">Wschód słońca</string>
+
+</resources>
